@@ -1,0 +1,425 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h5>Firebase Cloud Messaging (FCM)</h5>
+            <p>
+                Co to jest:
+            </p>
+            <p>
+                Jest to wieloplatformowe rozwiązanie do przesyłania wiadomości, które pozwala niezawodnie dostarczać
+                wiadomości bez żadnych kosztów.
+            </p>
+            <img src="img/firebase_cloud_messaging.png" style="height:30%; width: 30%">
+        </section>
+
+        <section>
+
+            <p>FCM – jest jedną z usług dostępnych z pakietu Firebase czyli BaaS (ang. Backend as a Service)</p>
+            <p style="font-size: xx-large">
+                Cloud Messaging – automatyczne wysyłanie notyfikacji do użytkowników. Często z reklamami,
+                dodatkowymi funkcjami naszej aplikacji lub zwyczajne powiadomienia o zdarzeniach wynikających z
+                biznesowej potrzeby.
+            </p>
+            <table>
+                <tr>
+                    <td>
+                        <ul style="font-size: xx-large">
+                            <li>Crash reporting</li>
+                            <li>Test Lab for Android</li>
+                            <li>Performance Monitoring</li>
+                            <li>AdMob i AdWords</li>
+
+                        </ul>
+                    </td>
+                    <td>
+                        <ul style="font-size: xx-large">
+                            <li>Remote Config</li>
+                            <li>Realtime Database</li>
+                            <li>Authentication</li>
+                            <li>Hosting</li>
+
+                        </ul>
+                    </td>
+                    <td>
+                        <ul style="font-size: xx-large">
+                            <li>Cloud Functions</li>
+                            <li>Cloud Storage</li>
+                            <li>Google Analytics</li>
+                            <li>Invites</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <section>
+            <h5>Rodzaje wiadomości FCM</h5>
+            <table>
+                <tr>
+                    <td>
+                        <ul style="font-size: xx-large">
+                            <li><b>Notification message</b> - Wiadomości z powiadomieniami, czasami uważane za
+                                „wyświetlanie wiadomości”. Są one obsługiwane automatycznie przez FCM SDK.
+                            </li>
+                        </ul>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    <td>
+                        <ul style="font-size: xx-large">
+                            <li><b>Data message</b> - wiadomość z danymi do aplikacji „cichy push”</li>
+                        </ul>
+                    </td>
+                </tr>
+
+            </table>
+            <p>
+                maksymalna wielkość obydwu typów wiadomości to <b>4kb</b>
+            </p>
+
+        </section>
+        <section>
+            <p>Tworzymy projekt Firebase</p>
+            <p>https://console.firebase.google.com</p>
+            <table>
+                <tr>
+                    <td><img src="img/tworzenie_projektu.png"></td>
+                </tr>
+            </table>
+
+
+        </section>
+        <section>
+            <p>Projekt został pomyślnie utworzony</p>
+            <table>
+                <tr>
+                    <td><img src="img/utworzony_projekt.png"></td>
+                </tr>
+            </table>
+        </section>
+        <section>
+            <p>Jak wysłać wiadomość FCM przez API REST</p>
+            <div style="text-align: left">
+                <p style="font-size: xx-large">1. Legacy API</p>
+
+                <p>https://fcm.googleapis.com/fcm/send (POST)</p>
+
+                <pre>
+							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
+//SEKCJA HEADER
+Content-Type:application/json
+Authorization:key=AIzaSyZ-1u...0GBYzPu7Udno5aA
+//SEKCJA BODY
+{ "data": {
+    "score": "5x1",
+    "time": "15:10"
+  },
+  "to" : "bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1..."
+}
+                                </code>
+                </pre>
+
+            </div>
+
+        </section>
+        <section>
+            <p>2. Nowe API v1 </p>
+<p style="font-size: xx-large">https://fcm.googleapis.com/v1/projects/myproject-b5ae1/messages:send HTTP/1.1 (POST)</p>
+            <pre>
+							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
+Content-Type: application/json
+Authorization: Bearer ya29.ElqKBGN2Ri_Uz...HnS_uNreA
+{
+  "message":{
+    "token":"bk3RNwTe3H0:CI2k_HHwgIpoDKCIZvvDMExUdFQ3P1...",
+    "notification":{
+      "title":"Portugal vs. Denmark",
+      "body":"great match!"
+    },
+    "data" : {
+      "Nick" : "Mario",
+      "Room" : "PortugalVSDenmark"
+    }
+  }
+}
+</code>
+</pre>
+
+        </section>
+        <section>
+            <h5>Poprawna odpowiedź od API</h5>
+            <pre>
+							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
+{ "multicast_id": 108,
+  "success": 1,
+  "failure": 0,
+  "results": [
+    { "message_id": "1:08" }
+  ]
+}
+                            </code>
+            </pre>
+
+        </section>
+    <section>
+<h5>Błędy których możemy się spodziewać od API FCM</h5>
+        <table border="1" style="font-size: x-large">
+            <tr>
+                <td>Opis błędu
+                </td>
+                <td>
+Kod HTTP
+                </td>
+            </tr>
+            <tr>
+            <td>Missing Registration Token</td>
+            <td>200 + error:MissingRegistration</td>
+            </tr>
+            <tr>
+                <td>Invalid Registration Token </td>
+                <td>200 + error:InvalidRegistration</td>
+            </tr>
+            <tr>
+                <td>Unregistered Device</td>
+                <td>200 + error:NotRegistered	</td>
+            </tr>
+            <tr>
+                <td>Invalid Package Name</td>
+                <td> 200 + error:InvalidPackageName </td>
+            </tr>
+            <tr>
+                <td>Authentication Error</td>
+                <td> 401 </td>
+            </tr>
+            <tr>
+                <td>Invalid JSON</td>
+                <td> 400 </td>
+            </tr>
+            <tr>
+                <td>Invalid Parameters</td>
+                <td>400 + error:InvalidParameters
+                </td>
+            </tr>
+            <tr>
+                <td>Message Too Big</td>
+                <td>200 + error:MessageTooBig
+
+                </td>
+            </tr>
+            <tr>
+                <td>Invalid APNs credentials</td>
+                <td> 200 + error:InvalidApnsCredential
+                </td>
+            </tr>
+        </table>
+    </section>
+<section>
+    <h5>Dodanie Aplikacji Android w konsoli Firebase</h5>
+    <table>
+        <tr>
+            <td><img src="img/dodanie_aplikacji_androidowej.png"></td>
+        </tr>
+    </table>
+
+</section>
+        <section>
+            <table>
+                <tr>
+                    <td><img src="img/pobierz_plik_google_service_json.png"></td>
+                </tr>
+            </table>
+        </section>
+        <section>
+            <table>
+                <tr>
+                    <td><img src="img/dodanie_bibiotek_do_androida.png"></td>
+                </tr>
+            </table>
+        </section>
+        <section>
+            <h5>FCM wymagania na Androidzie</h5>
+           <ul>
+               <li>Android 4.1 minium lub większy</li>
+
+               <li>Zainstalowany sklep Google Play na telefonie</li>
+           </ul>
+
+        </section>
+        <section>
+            <h5>Konfiguracja projektu Android</h5>
+            <p style="font-size: medium">Dodajemy go do AndroidManifest.xml </p>
+
+            <pre style="font-size: large">
+<code class="hljs xml" data-line-numbers="1">
+ <service android:name=".java.MyFirebaseMessagingService"
+  android:exported="false">
+ <intent-filter>
+   <action android:name="com.google.firebase.MESSAGING_EVENT" />
+ </intent-filter>
+</service>
+
+</code>
+            </pre>
+            <p style="font-size: medium">Tworzymy serwis dziedziczący po FirebaseMessagingService</p>
+            <pre style="font-size: medium">
+            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
+{
+     public class FirebaseService extends FirebaseMessagingService {
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        Map<String, String> data = remoteMessage.getData();
+        if (data.size() > 0) {
+            try {
+                AppTopic topic = AppTopic.valueOf(data.get(TOPIC));
+                FirebaseMessageAdapter adapter = topic.getClazz().getConstructor(Context.class).newInstance(getApplicationContext());
+
+            } catch (Exception e) {
+                log.error("Could not create adapter for message! Error: {}", e.getMessage());
+            }
+        }
+    }
+               </code>
+            </pre>
+        </section>
+        <section>
+            <h5>Pobieramy Firebase Token</h5>
+
+            <pre style="font-size: medium">
+            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
+public class FirebaseTokenService extends FirebaseInstanceIdService {
+    @Override
+    public void onTokenRefresh() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+
+         /// Wysłanie tokena do serwer
+        }
+    }
+       </code>
+            </pre>
+<p>
+Usuwanie tokena w przypadku wylogowania
+</p>
+            <pre style="font-size: medium">
+            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
+FirebaseInstanceId.getInstance().deleteInstanceId();
+            </code>
+            </pre>
+
+
+        </section>
+        <section>
+<h5>Kiedy zmienia się Firebase Token</h5>
+            <ul>
+            <li>w aplikacji usuniemy instancję ID</li>
+                <li>aplikację przeinstalujemy na nowym urządzeniu</li>
+                <li>odinstalujemy lub przeinstalujemy na urządzeniu</li>
+                <li>użytkownik wyczyści dane aplikacji</li>
+
+
+            </ul>
+
+
+        </section>
+        <section>
+            <h5>Test Powiadomień</h5>
+            <table>
+                <tr>
+                    <td><img src="img/tworzenie_powiadomienia_z_firebase_consoli.png"></td>
+                </tr>
+            </table>
+
+        </section>
+
+        <section>
+            <h5>Test Powiadomień - wysyłanie wiadomości</h5>
+            <table>
+                <tr>
+                    <td><img src="img/wysyłanie_wiadomosci_na_firebase_token.png"></td>
+                </tr>
+            </table>
+
+        </section>
+        <section>
+            <h5>Push na telefonie Andorid / iOS</h5>
+            <table>
+                <tr>
+                    <td><img src="img/android_push.png" style="height:60%; width: 60%"></td>
+                    <td><img src="img/ios_push.jpg" style="height:60%; width: 60%"></td>
+                </tr>
+            </table>
+
+        </section>
+        <section>
+            <h1>DZIĘKUJĘ ZA UWAGĘ</h1>
+
+
+
+        </section>
+        <section>
+            <h5>Bibliografia</h5>
+            <pre style="font-size: medium">
+    • https://logblog.pl/firebase-backend-dla-aplikacji/
+    • https://firebase.google.com/?gclid=CjwKCAjw-ZvlBRBbEiwANw9UWkpO7Nqq52duD8WYzJw1JGeJw1-NLpujZjv-M2D23jPJv_6BhJEKYhoCOhoQAvD_BwE
+    • https://ekspertsem.pl/google-wprowadza-firebase-narzedzie-analityczne-aplikacji-mobilnych/
+    • https://ekspertsem.pl/firebase-remote-config-krok-po-kroku/
+    • https://itiq.pl/marketing/czym-firebase-marketing-aplikacji-mobilnych-unity/
+    • https://firebase.google.com/pricing/?gclid=CjwKCAjw-ZvlBRBbEiwANw9UWuqcaUXKhkn-iXKp69LL1CHqw3b-OjRHOJ7Ii9DUHy8S-kDTax4EZhoCbTYQAvD_BwE
+    • https://firebase.google.com/products/cloud-messaging/
+    • https://firebase.google.com/docs/cloud-messaging/concept-options
+    • https://firebase.google.com/docs/cloud-messaging/android/
+    • https://docs.microsoft.com/pl-pl/xamarin/android/data-cloud/google-messaging/remote-notifications-with-fcm?tabs=windows
+    • https://datamobile.wordpress.com/2017/02/14/integracja-aplikacji-android-z-firebase-cloud-messaging/
+
+
+</pre>
+        </section>
+
+
+    </div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        hash: true,
+        controls: true,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>
