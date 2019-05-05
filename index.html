@@ -26,6 +26,17 @@
 <div class="reveal">
     <div class="slides">
         <section>
+            <h2>Firebase Cloud Messaging (FCM)</h2>
+<p></p>
+            <p></p>
+            <p></p>
+<br/>
+            <br/>
+            <p>Artur Knapczyk</p>
+
+        </section>
+
+        <section>
             <h5>Firebase Cloud Messaging (FCM)</h5>
             <p>
                 Co to jest:
@@ -93,7 +104,7 @@
                 <tr>
                     <td>
                         <ul style="font-size: xx-large">
-                            <li><b>Data message</b> - wiadomość z danymi do aplikacji „cichy push”</li>
+                            <li><b>Data message</b> - wiadomość z danymi do aplikacji, tzw. "cichy push"</li>
                         </ul>
                     </td>
                 </tr>
@@ -104,6 +115,19 @@
             </p>
 
         </section>
+        <section>
+            <p>Co musimy spełnić żeby używać FCM-a (na przykładzie Android-a)</p>
+            <ul style="font-size: xx-large">
+                <li>Utworzenie projektu na stronie Console firebase</li>
+                <li>W utworzonym projekcie wybranie odpowiedniej platformy (Andorid, iOS, Aplikacja Sieciowa) </li>
+                <li>Konfiguracja aplikacja Android</li>
+                <li>Pobrać firebase tokena wygenerowanego w aplikacji (indetyfikator urządzenia)</li>
+                <li>Przesłać firebe tokena do serwera aplikacji w celu identyfikacji urządzenia</li>
+                <li>Przygotowanie Serwer-a aplikacji który będzie wysyłał wiadomości przez API REST</li>
+            </ul>
+
+        </section>
+
         <section>
             <p>Tworzymy projekt Firebase</p>
             <p>https://console.firebase.google.com</p>
@@ -123,6 +147,109 @@
                 </tr>
             </table>
         </section>
+        <section>
+            <h5>Dodanie Aplikacji Android w konsoli Firebase</h5>
+            <table>
+                <tr>
+                    <td><img src="img/dodanie_aplikacji_androidowej.png"></td>
+                </tr>
+            </table>
+
+        </section>
+        <section>
+            <table>
+                <tr>
+                    <td><img src="img/pobierz_plik_google_service_json.png"></td>
+                </tr>
+            </table>
+        </section>
+        <section>
+            <table>
+                <tr>
+                    <td><img src="img/dodanie_bibiotek_do_androida.png"></td>
+                </tr>
+            </table>
+        </section>
+        <section>
+            <h5>FCM wymagania na Androidzie</h5>
+            <ul>
+                <li>Android 4.1 minium lub większy</li>
+
+                <li>Zainstalowany sklep Google Play na telefonie</li>
+            </ul>
+
+        </section>
+        <section>
+            <h5>Konfiguracja projektu Android</h5>
+            <p style="font-size: medium">Dodajemy go do AndroidManifest.xml </p>
+
+            <pre style="font-size: large">
+<code class="hljs xml" data-line-numbers="1">
+ <service android:name=".java.MyFirebaseMessagingService"
+          android:exported="false">
+ <intent-filter>
+   <action android:name="com.google.firebase.MESSAGING_EVENT" />
+ </intent-filter>
+</service>
+
+</code>
+            </pre>
+            <p style="font-size: medium">Tworzymy serwis dziedziczący po FirebaseMessagingService</p>
+            <pre style="font-size: medium">
+            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
+{
+     public class FirebaseService extends FirebaseMessagingService {
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        Map<String, String> data = remoteMessage.getData();
+        if (data.size() > 0) {
+            try {
+                AppTopic topic = AppTopic.valueOf(data.get(TOPIC));
+                FirebaseMessageAdapter adapter = topic.getClazz().getConstructor(Context.class).newInstance(getApplicationContext());
+
+            } catch (Exception e) {
+                log.error("Could not create adapter for message! Error: {}", e.getMessage());
+            }
+        }
+    }
+               </code>
+            </pre>
+        </section>
+        <section>
+            <h5>Pobieramy Firebase Token</h5>
+
+            <pre style="font-size: medium">
+            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
+public class FirebaseTokenService extends FirebaseInstanceIdService {
+    @Override
+    public void onTokenRefresh() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+
+         /// Wysłanie tokena do serwer
+        }
+    }
+       </code>
+            </pre>
+            <p>
+                Usuwanie tokena w przypadku wylogowania
+            </p>
+            <pre style="font-size: medium">
+            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
+FirebaseInstanceId.getInstance().deleteInstanceId();
+            </code>
+            </pre>
+
+
+        </section>
+        <section>
+            <h5>Kiedy zmienia się Firebase Token</h5>
+            <ul>
+                <li>w aplikacji usuniemy instancję ID</li>
+                <li>odinstalujemy lub przeinstalujemy aplikację</li>
+                <li>użytkownik wyczyści dane aplikacji</li>
+            </ul>
+        </section>
+
         <section>
             <p>Jak wysłać wiadomość FCM przez API REST</p>
             <div style="text-align: left">
@@ -239,113 +366,7 @@ Kod HTTP
             </tr>
         </table>
     </section>
-<section>
-    <h5>Dodanie Aplikacji Android w konsoli Firebase</h5>
-    <table>
-        <tr>
-            <td><img src="img/dodanie_aplikacji_androidowej.png"></td>
-        </tr>
-    </table>
 
-</section>
-        <section>
-            <table>
-                <tr>
-                    <td><img src="img/pobierz_plik_google_service_json.png"></td>
-                </tr>
-            </table>
-        </section>
-        <section>
-            <table>
-                <tr>
-                    <td><img src="img/dodanie_bibiotek_do_androida.png"></td>
-                </tr>
-            </table>
-        </section>
-        <section>
-            <h5>FCM wymagania na Androidzie</h5>
-           <ul>
-               <li>Android 4.1 minium lub większy</li>
-
-               <li>Zainstalowany sklep Google Play na telefonie</li>
-           </ul>
-
-        </section>
-        <section>
-            <h5>Konfiguracja projektu Android</h5>
-            <p style="font-size: medium">Dodajemy go do AndroidManifest.xml </p>
-
-            <pre style="font-size: large">
-<code class="hljs xml" data-line-numbers="1">
- <service android:name=".java.MyFirebaseMessagingService"
-  android:exported="false">
- <intent-filter>
-   <action android:name="com.google.firebase.MESSAGING_EVENT" />
- </intent-filter>
-</service>
-
-</code>
-            </pre>
-            <p style="font-size: medium">Tworzymy serwis dziedziczący po FirebaseMessagingService</p>
-            <pre style="font-size: medium">
-            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
-{
-     public class FirebaseService extends FirebaseMessagingService {
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        Map<String, String> data = remoteMessage.getData();
-        if (data.size() > 0) {
-            try {
-                AppTopic topic = AppTopic.valueOf(data.get(TOPIC));
-                FirebaseMessageAdapter adapter = topic.getClazz().getConstructor(Context.class).newInstance(getApplicationContext());
-
-            } catch (Exception e) {
-                log.error("Could not create adapter for message! Error: {}", e.getMessage());
-            }
-        }
-    }
-               </code>
-            </pre>
-        </section>
-        <section>
-            <h5>Pobieramy Firebase Token</h5>
-
-            <pre style="font-size: medium">
-            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
-public class FirebaseTokenService extends FirebaseInstanceIdService {
-    @Override
-    public void onTokenRefresh() {
-        String token = FirebaseInstanceId.getInstance().getToken();
-
-         /// Wysłanie tokena do serwer
-        }
-    }
-       </code>
-            </pre>
-<p>
-Usuwanie tokena w przypadku wylogowania
-</p>
-            <pre style="font-size: medium">
-            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
-FirebaseInstanceId.getInstance().deleteInstanceId();
-            </code>
-            </pre>
-
-
-        </section>
-        <section>
-<h5>Kiedy zmienia się Firebase Token</h5>
-            <ul>
-            <li>w aplikacji usuniemy instancję ID</li>
-                <li>aplikację przeinstalujemy na nowym urządzeniu</li>
-                <li>odinstalujemy lub przeinstalujemy na urządzeniu</li>
-                <li>użytkownik wyczyści dane aplikacji</li>
-
-
-            </ul>
-
-
-        </section>
         <section>
             <h5>Test Powiadomień</h5>
             <table>
@@ -369,15 +390,18 @@ FirebaseInstanceId.getInstance().deleteInstanceId();
             <h5>Push na telefonie Andorid / iOS</h5>
             <table>
                 <tr>
-                    <td><img src="img/android_push.png" style="height:60%; width: 60%"></td>
-                    <td><img src="img/ios_push.jpg" style="height:60%; width: 60%"></td>
+                    <td><img src="img/android_push.png" style="width: 60%"></td>
+                    <td><img src="img/ios_push.jpg" style="width: 60%"></td>
                 </tr>
             </table>
 
         </section>
         <section>
             <h1>DZIĘKUJĘ ZA UWAGĘ</h1>
+<p>
 
+</p>
+            <p>mgr inż. Artur Knapczyk</p>
 
 
         </section>
