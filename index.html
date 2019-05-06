@@ -37,7 +37,7 @@
         </section>
 
         <section>
-            <h5>Firebase Cloud Messaging (FCM)</h5>
+            <h5>FIREBASE CLOUD MESSAGING (FCM)</h5>
             <p>
                 Co to jest:
             </p>
@@ -59,7 +59,7 @@
             <table>
                 <tr>
                     <td>
-                        <ul style="font-size: xx-large">
+                        <ul style="font-size: x-large">
                             <li>Crash reporting</li>
                             <li>Test Lab for Android</li>
                             <li>Performance Monitoring</li>
@@ -68,7 +68,7 @@
                         </ul>
                     </td>
                     <td>
-                        <ul style="font-size: xx-large">
+                        <ul style="font-size: x-large">
                             <li>Remote Config</li>
                             <li>Realtime Database</li>
                             <li>Authentication</li>
@@ -77,7 +77,7 @@
                         </ul>
                     </td>
                     <td>
-                        <ul style="font-size: xx-large">
+                        <ul style="font-size: x-large">
                             <li>Cloud Functions</li>
                             <li>Cloud Storage</li>
                             <li>Google Analytics</li>
@@ -88,7 +88,7 @@
             </table>
         </section>
         <section>
-            <h5>Rodzaje wiadomości FCM</h5>
+            <h5>RODZAJE WIADOMOŚCI FCM</h5>
             <table>
                 <tr>
                     <td>
@@ -111,12 +111,12 @@
 
             </table>
             <p>
-                maksymalna wielkość obydwu typów wiadomości to <b>4kb</b>
+                Maksymalna wielkość obydwu typów wiadomości to </br> <b>4kb</b>
             </p>
 
         </section>
         <section>
-            <p>Co musimy spełnić żeby używać FCM-a (na przykładzie Android-a)</p>
+            <p>CO MUSIMY SPEŁNIĆ ŻEBY UŻYWAĆ FCM-A <br />(NA PRZYKŁADZIE ANDROID-A)</p>
             <ul style="font-size: xx-large">
                 <li>Utworzenie projektu na stronie Console firebase</li>
                 <li>W utworzonym projekcie wybranie odpowiedniej platformy (Android, iOS, Aplikacja Sieciowa) </li>
@@ -129,7 +129,7 @@
         </section>
 
         <section>
-            <p>Tworzymy projekt Firebase</p>
+            <p>TWORZYMY PROJEKT FIREBASE</p>
             <p>https://console.firebase.google.com</p>
             <table>
                 <tr>
@@ -140,7 +140,7 @@
 
         </section>
         <section>
-            <p>Projekt został pomyślnie utworzony</p>
+            <p>PROJEKT ZOSTAŁ POMYŚLNIE UTWORZONY</p>
             <table>
                 <tr>
                     <td><img src="img/utworzony_projekt.png"></td>
@@ -148,7 +148,7 @@
             </table>
         </section>
         <section>
-            <h5>Dodanie Aplikacji Android w konsoli Firebase</h5>
+            <h5>DODANIE APLIKACJI ANDROID W KONSOLI FIREBASE</h5>
             <table>
                 <tr>
                     <td><img src="img/dodanie_aplikacji_androidowej.png"></td>
@@ -157,6 +157,7 @@
 
         </section>
         <section>
+            <h5>PLIK KONFIGURACYJNY DLA ANDROIDA</h5>
             <table>
                 <tr>
                     <td><img src="img/pobierz_plik_google_service_json.png"></td>
@@ -164,6 +165,7 @@
             </table>
         </section>
         <section>
+            <h5>DODANIE ZALEŻNOŚCI DO ANDROIDA</h5>
             <table>
                 <tr>
                     <td><img src="img/dodanie_bibiotek_do_androida.png"></td>
@@ -171,7 +173,7 @@
             </table>
         </section>
         <section>
-            <h5>FCM wymagania na Androidzie</h5>
+            <h5>FCM WYMAGANIA NA ANDROIDZIE</h5>
             <ul>
                 <li>Android 4.1 minium lub większy</li>
 
@@ -180,7 +182,7 @@
 
         </section>
         <section>
-            <h5>Konfiguracja projektu Android</h5>
+            <h5>KONFIGURACJA PROJEKTU ANDROID</h5>
             <p style="font-size: medium">Dodajemy go do AndroidManifest.xml </p>
 
             <pre style="font-size: large">
@@ -216,7 +218,7 @@
             </pre>
         </section>
         <section>
-            <h5>Pobieramy Firebase Token</h5>
+            <h5>POBIERAMY FIREBASE TOKEN</h5>
 
             <pre style="font-size: medium">
             <code class="hljs java" data-trim data-noescape data-line-numbers="1">
@@ -242,16 +244,16 @@ FirebaseInstanceId.getInstance().deleteInstanceId();
 
         </section>
         <section>
-            <h5>Kiedy zmienia się Firebase Token</h5>
+            <h5>KIEDY ZMIENIA SIĘ FIREBASE TOKEN</h5>
             <ul>
-                <li>w aplikacji usuniemy instancję ID</li>
-                <li>odinstalujemy lub przeinstalujemy aplikację</li>
-                <li>użytkownik wyczyści dane aplikacji</li>
+                <li>W aplikacji usuniemy instancję ID</li>
+                <li>Odinstalujemy lub przeinstalujemy aplikację</li>
+                <li>Użytkownik wyczyści dane aplikacji</li>
             </ul>
         </section>
 
         <section>
-            <p>Jak wysłać wiadomość FCM przez API REST</p>
+            <p>JAK WYSŁAĆ WIADOMOŚĆ FCM PRZEZ API REST</p>
             <div style="text-align: left">
                 <p style="font-size: xx-large">1. Legacy API</p>
 
@@ -276,7 +278,7 @@ Authorization:key=AIzaSyZ-1u...0GBYzPu7Udno5aA
 
         </section>
         <section>
-            <p>2. Nowe API v1 </p>
+            <p>2. NOWE API V1 </p>
 <p style="font-size: xx-large">https://fcm.googleapis.com/v1/projects/myproject-b5ae1/messages:send HTTP/1.1 (POST)</p>
             <pre>
 							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
@@ -300,7 +302,7 @@ Authorization: Bearer ya29.ElqKBGN2Ri_Uz...HnS_uNreA
 
         </section>
         <section>
-            <h5>Poprawna odpowiedź od API</h5>
+            <h5>OPRAWNA ODPOWIEDŹ OD API</h5>
             <pre>
 							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
 { "multicast_id": 108,
@@ -315,7 +317,7 @@ Authorization: Bearer ya29.ElqKBGN2Ri_Uz...HnS_uNreA
 
         </section>
     <section>
-<h5>Błędy których możemy się spodziewać od API FCM</h5>
+<h5>BŁĘDY KTÓRYCH MOŻEMY SIĘ SPODZIEWAĆ OD API FCM</h5>
         <table border="1" style="font-size: x-large">
             <tr>
                 <td>Opis błędu
@@ -368,7 +370,7 @@ Kod HTTP
     </section>
 
         <section>
-            <h5>Test Powiadomień</h5>
+            <h5>TEST POWIADOMIEŃ</h5>
             <table>
                 <tr>
                     <td><img src="img/tworzenie_powiadomienia_z_firebase_consoli.png"></td>
@@ -378,7 +380,7 @@ Kod HTTP
         </section>
 
         <section>
-            <h5>Test Powiadomień - wysyłanie wiadomości</h5>
+            <h5>TEST POWIADOMIEŃ - WYSYŁANIE WIADOMOŚCI</h5>
             <table>
                 <tr>
                     <td><img src="img/wysyłanie_wiadomosci_na_firebase_token.png"></td>
@@ -387,7 +389,7 @@ Kod HTTP
 
         </section>
         <section>
-            <h5>Push na telefonie Andorid / iOS</h5>
+            <h5>PUSH NA TELEFONIE ANDORID / IOS</h5>
             <table>
                 <tr>
                     <td><img src="img/android_push.png" style="width: 60%"></td>
