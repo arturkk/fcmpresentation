@@ -95,6 +95,7 @@
                         <ul style="font-size: xx-large">
                             <li><b>Notification message</b> - Wiadomości z powiadomieniami, czasami uważane za
                                 „wyświetlanie wiadomości”. Są one obsługiwane automatycznie przez FCM SDK.
+                                (Reklamy, Alerty pogodowe)
                             </li>
                         </ul>
                     </td>
@@ -121,8 +122,8 @@
                 <li>Utworzenie projektu na stronie Console firebase</li>
                 <li>W utworzonym projekcie wybranie odpowiedniej platformy (Android, iOS, Aplikacja Sieciowa) </li>
                 <li>Konfiguracja aplikacji Android</li>
-                <li>Pobrać firebase tokena wygenerowanego w aplikacji (indetyfikator urządzenia)</li>
-                <li>Przesłać firebe tokena do serwera aplikacji w celu identyfikacji urządzenia</li>
+                <li>Pobrać firebase tokena wygenerowanego w aplikacji (identyfikator urządzenia)</li>
+                <li>Przesłać firebase tokena do serwera aplikacji w celu identyfikacji urządzenia</li>
                 <li>Przygotowanie Serwer-a aplikacji który będzie wysyłał wiadomości przez API REST</li>
             </ul>
 
@@ -227,7 +228,7 @@ public class FirebaseTokenService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String token = FirebaseInstanceId.getInstance().getToken();
 
-         /// Wysłanie tokena do serwer
+         /// Wysłanie tokena do serwera
         }
     }
        </code>
@@ -302,7 +303,7 @@ Authorization: Bearer ya29.ElqKBGN2Ri_Uz...HnS_uNreA
 
         </section>
         <section>
-            <h5>OPRAWNA ODPOWIEDŹ OD API</h5>
+            <h5>POPRAWNA ODPOWIEDŹ OD API</h5>
             <pre>
 							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
 { "multicast_id": 108,
@@ -343,6 +344,17 @@ Kod HTTP
                 <td> 200 + error:InvalidPackageName </td>
             </tr>
             <tr>
+                <td>Invalid APNs credentials - błąd tylko na iOS</td>
+                <td> 200 + error:InvalidApnsCredential
+                </td>
+            </tr>
+            <tr>
+                <td>Message Too Big</td>
+                <td>200 + error:MessageTooBig
+
+                </td>
+            </tr>
+            <tr>
                 <td>Authentication Error</td>
                 <td> 401 </td>
             </tr>
@@ -355,17 +367,7 @@ Kod HTTP
                 <td>400 + error:InvalidParameters
                 </td>
             </tr>
-            <tr>
-                <td>Message Too Big</td>
-                <td>200 + error:MessageTooBig
 
-                </td>
-            </tr>
-            <tr>
-                <td>Invalid APNs credentials</td>
-                <td> 200 + error:InvalidApnsCredential
-                </td>
-            </tr>
         </table>
     </section>
 
