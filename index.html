@@ -217,8 +217,7 @@
             <p style="font-size: medium">Dodajemy go do AndroidManifest.xml </p>
 
             <pre style="font-size: large">
-<code class="hljs xml" data-line-numbers="1">
-
+<code class="hljs xml" data-line-numbers="1-10">
  <service android:name=".java.MyFirebaseMessagingService"
           android:exported="false">
  <intent-filter>
@@ -230,13 +229,13 @@
             </pre>
             <p style="font-size: medium">Tworzymy serwis dziedziczący po FirebaseMessagingService</p>
             <pre style="font-size: medium">
-            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
-{
-     public class FirebaseService extends FirebaseMessagingService {
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        Map<String, String> data = remoteMessage.getData();
-        if (data.size() > 0) {
+            <code class="hljs java" data-trim data-noescape data-line-numbers="1-20">
+
+    public class FirebaseService extends FirebaseMessagingService {
+        @Override
+        public void onMessageReceived(RemoteMessage remoteMessage) {
+            Map<String, String> data = remoteMessage.getData();
+            if (data.size() > 0) {
             try {
                 AppTopic topic = AppTopic.valueOf(data.get(TOPIC));
                 FirebaseMessageAdapter adapter = topic.getClazz().getConstructor(Context.class).newInstance(getApplicationContext());
@@ -246,14 +245,14 @@
             }
         }
     }
-               </code>
+              </code>
             </pre>
         </section>
         <section>
             <h5>POBIERAMY FIREBASE TOKEN</h5>
 
             <pre style="font-size: medium">
-            <code class="hljs java" data-trim data-noescape data-line-numbers="1">
+            <code class="hljs" data-trim data-noescape data-line-numbers="1-20">
 public class FirebaseTokenService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
@@ -294,7 +293,7 @@ FirebaseInstanceId.getInstance().deleteInstanceId();
                 <p style="font-size: xx-large">https://fcm.googleapis.com/fcm/send (POST)</p>
 
                 <pre style="font-size: medium">
-							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
+							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1-20">
 //SEKCJA HEADER
 Content-Type:application/json
 Authorization:key=AIzaSyZ-1u...0GBYzPu7Udno5aA   //Autoryzacja przez Klucz
@@ -321,7 +320,7 @@ Authorization:key=AIzaSyZ-1u...0GBYzPu7Udno5aA   //Autoryzacja przez Klucz
             <p style="font-size: x-large">2. Nowe API V1 </p>
 <p style="font-size: large">https://fcm.googleapis.com/v1/projects/myproject-b5ae1/messages:send HTTP/1.1 (POST)</p>
             <pre style="font-size: x-small">
-							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
+							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1-40">
 Content-Type: application/json
 Authorization: Bearer ya29.ElqKBGN2Ri_Uz...HnS_uNreA //Autoryzacja przez OAuth2.0
 {
@@ -362,7 +361,7 @@ Authorization: Bearer ya29.ElqKBGN2Ri_Uz...HnS_uNreA //Autoryzacja przez OAuth2.
         <section>
             <h5>POPRAWNA ODPOWIEDŹ OD API</h5>
             <pre>
-							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1">
+							<code class="hljs javascript" data-trim data-noescape data-line-numbers="1-12">
 {
   "success" : 1,
   "failure" : 0,
