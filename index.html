@@ -218,7 +218,7 @@
 
             <pre style="font-size: large">
 <code class="hljs xml" data-line-numbers="1-10">
- <service android:name=".java.MyFirebaseMessagingService"
+ <service android:name=".service.FirebaseService"
           android:exported="false">
  <intent-filter>
       <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -258,7 +258,16 @@ public class FirebaseTokenService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String token = FirebaseInstanceId.getInstance().getToken();
 
-         /// Wysłanie wartość tokena na serwer aplikacji
+        UserDetails.setTokenToUpdate(token, getApplicationContext());
+        log.info("Firebase token: {}", token);
+        String login = UserDetails.getLogin(getApplicationContext());
+        if (!StringUtils.isEmpty(login)) {
+            FirebaseTokenDto tokenDto = FirebaseTokenDto
+                    .builder()
+                    .token(token)
+                    .login(login)
+                    .build();
+            firebaseAPI.updateFirebaseToken(tokenDto).enqueue(new UpdateFirebaseTokenCallback(getApplicationContext()));
         }
     }
        </code>
@@ -300,16 +309,17 @@ Authorization:key=AIzaSyZ-1u...0GBYzPu7Udno5aA   //Autoryzacja przez Klucz
 //SEKCJA BODY
 // Android
 {
-  "to": "/topics/news",
-  "notification": {
-    "title": "Breaking News",
-    "body": "Check out the Top Story.",
-    "click_action": "TOP_STORY_ACTIVITY"
+  "to" : "ehXfNFNdoMc:APA91bGVp1YrSU2z-U2mk-L8jTR08KFxu-zoWmiH6GW0m6UmMjbdVpHTip.....",
+  "data" : {
+    "title" : "Unity-t firma",
+    "body" : "Alarm rozbrojony",
+    "sound" : "default"
   },
-  "data": {
-    "story_id": "story_12345"
-  }
+  "priority" : "high",   // wybudzenie telefonu jeśli jest w trybie Doze mode
+  "time_to_live" : 86400, // czas życia wiadomości
+  "content_available" : true
 }
+
 </code>
                 </pre>
             </div>
@@ -325,6 +335,7 @@ Content-Type: application/json
 Authorization: Bearer ya29.ElqKBGN2Ri_Uz...HnS_uNreA //Autoryzacja przez OAuth2.0
 {
   "message": {
+    "token": "ehXfNFNdoMc:APA91bGVp1YrSU2z-U2mk-L8jTR08KFxu-zoWmiH6GW0m6UmMjbdVpHTip.....",
     "topic": "news",
     "notification": {
       "title": "Breaking News",
